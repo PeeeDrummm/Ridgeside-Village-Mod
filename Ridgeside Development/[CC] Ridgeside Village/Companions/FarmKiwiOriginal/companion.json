@@ -1,5 +1,5 @@
 {
-  "Name": "FarmKiwiRafseazz",
+  "Name": "FarmKiwiOriginal",
   "Type": "Walking", // Can either be Walking or Flying | Walking has collision with objects, flying has no collision
   "EnableFarmerCollision": true, // Optional parameter, determines if the companion will collide with the farmer | NOTE: Only usable with map-based spawns, does nothing for follower-based spawns (e.g. with rings)
   "EnableShadow": true, // Optional parameter, default false
