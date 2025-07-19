@@ -225,6 +225,11 @@ namespace RidgesideVillage
                 }
                 return null; //return null for an unready token.
             });
+            
+            cp.RegisterToken(this.ModManifest, "PortraitStyle", () =>
+            {
+                return new [] {Config.PortraitStyle};
+            });
         }
 
         internal class ShirtName

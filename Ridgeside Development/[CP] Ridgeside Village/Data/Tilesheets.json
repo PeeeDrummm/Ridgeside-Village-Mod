@@ -5,7 +5,7 @@
 {
    "Action": "Load",
    "Target": "Maps/EzekielPicFinal",
-   "FromFile": "Assets/Maps/TileSheets/{{TargetWithoutPath}}.png"
+   "FromFile": "Assets/{{NyapuPortraitsToken}}Maps/TileSheets/{{TargetWithoutPath}}.png"
 },
 {
    "Action": "Load",

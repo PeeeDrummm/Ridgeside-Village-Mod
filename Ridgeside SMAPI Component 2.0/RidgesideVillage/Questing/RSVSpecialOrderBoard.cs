@@ -144,8 +144,8 @@ namespace RidgesideVillage.Questing
 				string key = keys[k];
 				if (force_refresh) Log.Trace($"Checking {key}");
 				bool invalid = false;
-				bool repeatable = order_data[key].Repeatable == true;
-				if (repeatable && Game1.MasterPlayer.team.completedSpecialOrders.Contains(key))
+				bool repeatable = order_data[key].Repeatable;
+				if (!repeatable && Game1.MasterPlayer.team.completedSpecialOrders.Contains(key))
 				{
 					if (force_refresh) Log.Trace($"Not repeatable and already done");
 					invalid = true;

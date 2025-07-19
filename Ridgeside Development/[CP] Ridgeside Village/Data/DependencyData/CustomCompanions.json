@@ -563,7 +563,7 @@
              "Position": { "X": 72, "Y": 16 },
              "Layer": "Back",
              "SetProperties": {
-                "CustomCompanions": "Spawn 1 Rafseazz.RSVCC.FarmKiwi",
+                "CustomCompanions": "Spawn 1 Rafseazz.RSVCC.FarmKiwi{{Rafseazz.RidgesideVillage/PortraitStyle}}",
              }
           }
        ],
@@ -584,7 +584,7 @@
              "Position": { "X": 72, "Y": 16 },
              "Layer": "Back",
              "SetProperties": {
-                "CustomCompanions": "Spawn 1 Rafseazz.RSVCC.FarmKiwi",
+                "CustomCompanions": "Spawn 1 Rafseazz.RSVCC.FarmKiwi{{Rafseazz.RidgesideVillage/PortraitStyle}}",
              }
           }
        ],
@@ -600,7 +600,7 @@
     {
        "LogName": "Farm Kiwi Random Dialogue",
        "Action": "EditData",
-       "Target": "{{PeacefulEnd.CustomCompanions/Companions:Rafseazz.RSVCC.FarmKiwi}}",
+       "Target": "{{PeacefulEnd.CustomCompanions/Companions:Rafseazz.RSVCC.FarmKiwi{{Rafseazz.RidgesideVillage/PortraitStyle}}}}",
        "Entries": {
           "Companion": {
              "InspectionDialogue": "{{i18n:FarmKiwi.{{Random: {{Range: 1,10}} }} }}",
@@ -610,7 +610,7 @@
 		{
        "LogName": "Farm Kiwi Random Jio Dialogue",
        "Action": "EditData",
-       "Target": "{{PeacefulEnd.CustomCompanions/Companions:Rafseazz.RSVCC.FarmKiwi}}",
+       "Target": "{{PeacefulEnd.CustomCompanions/Companions:Rafseazz.RSVCC.FarmKiwi{{Rafseazz.RidgesideVillage/PortraitStyle}}}}",
 			 "When":
 			 {
 				 "RandomNumber": 1,
@@ -625,7 +625,7 @@
 		{
        "LogName": "Farm Kiwi Random Daia Dialogue",
        "Action": "EditData",
-       "Target": "{{PeacefulEnd.CustomCompanions/Companions:Rafseazz.RSVCC.FarmKiwi}}",
+       "Target": "{{PeacefulEnd.CustomCompanions/Companions:Rafseazz.RSVCC.FarmKiwi{{Rafseazz.RidgesideVillage/PortraitStyle}}}}",
 			 "When":
 			 {
 				 "RandomNumber": 1,

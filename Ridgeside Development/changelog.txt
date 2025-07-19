@@ -3,6 +3,7 @@ RSV 2.5.18
 - Portrait retouch for Carmen, Blair, Richard, and for a secret character
 - Minor portrait tweaks to Aguar, Faye, Shanice, Corine
 - Updated Cable Car Station design
+- Added Nyapu-Style Portraits
 
 RSV 2.5.17
 ------------------------------------------------------

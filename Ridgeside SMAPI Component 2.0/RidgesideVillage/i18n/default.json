@@ -261,6 +261,9 @@
 	"OddJobsFencePrice.Description": "Set the price the Odd Job fence fixing service costs per fence.",
 	"OddJobsPetPrice": "Petting Price",
 	"OddJobsPetPrice.Description": "Set the price the Odd Job petting service costs per animal.",
+	"PortraitStyle": "Portrait Style",
+	"PortraitStyle.Description": "Which portraits to use for the RSV Characters",
+	
 	
 	"ErrorMessage": "Ridgeside Village seems to be installed incorrectly. Check the log for more details."
 }

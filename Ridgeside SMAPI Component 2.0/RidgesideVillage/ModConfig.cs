@@ -41,5 +41,6 @@ namespace RidgesideVillage
         public int OddJobsFencePrice = 10;
         public int OddJobsPetPrice = 10;
 
+        public string PortraitStyle = "Original";
     }
 }

@@ -50,6 +50,7 @@ namespace RidgesideVillage
                 GMCM.AddNumberOption(ModManifest, () => Config.OddJobsWateringPrice, (int val) => Config.OddJobsWateringPrice = val, () => i18n.Get("OddJobsWateringPrice"), () => i18n.Get("OddJobsWateringPrice.Description"), min: 0, max:100);
                 GMCM.AddNumberOption(ModManifest, () => Config.OddJobsFencePrice, (int val) => Config.OddJobsFencePrice = val, () => i18n.Get("OddJobsFencePrice"), () => i18n.Get("OddJobsFencePrice.Description"), min: 0, max: 100);
                 GMCM.AddNumberOption(ModManifest, () => Config.OddJobsPetPrice, (int val) => Config.OddJobsPetPrice = val, () => i18n.Get("OddJobsPetPrice"), () => i18n.Get("OddJobsPetPrice.Description"),min: 0, max: 100);
+                GMCM.AddTextOption(ModManifest, () => Config.PortraitStyle, (string val) => Config.PortraitStyle = val, () => i18n.Get("PortraitStyle"), () => i18n.Get("PortraitStyle.Description"), new []{"Original", "Nyapu"});
             }
             
 

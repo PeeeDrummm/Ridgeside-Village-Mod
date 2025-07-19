@@ -479,6 +479,16 @@
 			"Value": "{{Hana.GNMTokens/ElderFamilialNoun}}",
 			"When": { "HasMod |contains=Hana.GNMTokens": true }
 		},
+		// Nyapu Portraits Compatibility
+		{
+			"Name": "NyapuPortraitsToken",
+			"Value": ""
+		},
+		{
+			"Name": "NyapuPortraitsToken",
+			"Value": "Nyapu/",
+			"When": { "Rafseazz.RidgesideVillage/PortraitStyle": "Nyapu" }
+		}
 	],
 	/*********
 	** Patches
