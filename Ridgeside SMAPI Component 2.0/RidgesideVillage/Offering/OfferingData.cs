@@ -1,10 +1,11 @@
-﻿using StardewValley;
+using StardewValley;
+using StardewValley.Buffs;    //BuffEffects
 using StardewValley.TerrainFeatures;
+using Microsoft.Xna.Framework; // Vector2
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SObject = StardewValley.Object;
 
 namespace RidgesideVillage.Offering
 {
@@ -17,7 +18,6 @@ namespace RidgesideVillage.Offering
             lookup = new Dictionary<string, OfferEntry>();
             lookup = ModEntry.Helper.Data.ReadJsonFile<Dictionary<string, OfferEntry>>("assets//OfferingData.json");
         }
-
     }
 
     enum OfferingType
@@ -35,190 +35,154 @@ namespace RidgesideVillage.Offering
 
     internal class OfferEntry
     {
-        //strength for buff or amount for watering/growing
+        // força do buff ou quantidade para regar/crescer
         public int Value { get; set; }
-        //Buff duration (if its a buff, otherwise ignored)
+        // duração em segundos (para buff)
         public int Duration { get; set; }
         public OfferingType Effect { get; set; }
-        // name of Buff if it's a buff/debuff, otherwise ignored
+        // nome do buff se for buff/debuff
         public string BuffType { get; set; }
-        //key of corresponding entry in event file
+        // chave do script
         public string ScriptKey { get; set; }
 
-        //Apply the effect
+        // aplica o efeito
         internal void Apply()
         {
-
             switch (this.Effect)
             {
                 case OfferingType.WaterPlants:
                     UtilFunctions.WaterPlants(Game1.getFarm());
                     break;
+
                 case OfferingType.Buff:
                     this.ApplyBuff();
                     break;
+
                 case OfferingType.GrowPlants:
                     this.GrowPlants();
                     break;
+
                 case OfferingType.ForecastRain:
                     Game1.weatherForTomorrow = Game1.weather_rain;
                     break;
+
                 case OfferingType.ForecastSun:
                     Game1.weatherForTomorrow = Game1.weather_sunny;
                     break;
+
                 case OfferingType.BoostLuck:
                     Game1.player.team.sharedDailyLuck.Value = 0.12;
                     break;
+
                 case OfferingType.BabyChance:
                     Game1.player.mailReceived.Add(RSVConstants.M_TORTSLOVE);
                     break;
+
                 case OfferingType.MeteorChance:
                     Game1.player.mailReceived.Add(RSVConstants.M_TORTSMETEOR);
                     break;
-                /*
-                case OfferingType.FairyChance:
-                    Game1.player.mailReceived.Add(RSVConstants.M_TORTSFAIRY);
-                    break;
-                */
             }
-            return;
         }
 
+        // faz crescer em TODAS as localizações
         private void GrowPlants()
         {
-            int n = 0;
-            var locations = new List<GameLocation>() { Game1.getFarm(), Game1.getLocationFromName(RSVConstants.L_SUMMITFARM) };
-            foreach (var location in locations)
+            int grown = 0;
+            int limit = this.Value;
+
+            foreach (var location in Game1.locations)
             {
-                if (location is not null)
+                if (location?.terrainFeatures == null || location.terrainFeatures.Count() == 0)
+                    continue;
+
+                foreach (var pair in location.terrainFeatures.Pairs)
                 {
-                    foreach (var pair in location.terrainFeatures.Pairs)
+                    if (grown >= limit)
+                        return;
+
+                    if (pair.Value is not HoeDirt dirt || dirt.crop is null)
+                        continue;
+
+                    var crop = dirt.crop;
+                    bool needsGrowth =
+                        crop.currentPhase.Value < crop.phaseDays.Count - 1
+                        || (crop.fullyGrown.Value && crop.dayOfCurrentPhase.Value > 0);
+
+                    if (!needsGrowth)
+                        continue;
+
+                    if (crop.isWildSeedCrop())
                     {
-                        if (n >= this.Value)
+                        string forageQid = crop.getRandomWildCropForSeason(Game1.season); // 1.6: IDs string
+                        if (!location.objects.ContainsKey(dirt.Tile))
                         {
-                            break;
-                        }
-                        if (pair.Value is HoeDirt dirt && dirt.crop != null)
-                        {
-                            Crop crop = dirt.crop;
-                            bool harvestable = crop.currentPhase.Value >= crop.phaseDays.Count - 1 && (!crop.fullyGrown.Value || crop.dayOfCurrentPhase.Value <= 0);
-
-                            if (harvestable)
+                            var item = ItemRegistry.Create(forageQid, 1);
+                            if (item is SObject obj)
                             {
-                                continue;
+                                obj.IsSpawnedObject = true;
+                                obj.CanBeGrabbed = true;
+                                location.objects[dirt.Tile] = obj;
+                                Log.Verbose($"RSV: Forage crop fully grown at {dirt.Tile.X}, {dirt.Tile.Y} in {location.Name}.");
+                                dirt.destroyCrop(false);
                             }
-                            else if (crop.isWildSeedCrop())
-                            {
-                                String forage = crop.getRandomWildCropForSeason(Game1.season);
-                                var Farm = Game1.getFarm();
-
-                                //check if an object is already there
-                                if (!Farm.objects.ContainsKey(dirt.Tile))
-                                {
-                                    Game1.getFarm().objects.Add(dirt.Tile, new StardewValley.Object(forage, 1)
-                                    {
-                                        IsSpawnedObject = true,
-                                        CanBeGrabbed = true
-                                    });
-                                    Log.Verbose($"RSV: Forage crop fully grown at {dirt.Tile.X}, {dirt.Tile.Y}.");
-                                    crop = null;
-                                    dirt.destroyCrop(false);
-
-                                }
-                            }
-                            else
-                            {
-                                crop.growCompletely();
-                                Log.Verbose($"RSV: Regular crop fully grown at {dirt.Tile.X}, {dirt.Tile.Y}.");
-                            }
-
-                            n++;
                         }
                     }
+                    else
+                    {
+                        crop.growCompletely();
+                        Log.Verbose($"RSV: Regular crop fully grown at {dirt.Tile.X}, {dirt.Tile.Y} in {location.Name}.");
+                    }
+
+                    grown++;
                 }
             }
-
         }
 
         private void ApplyBuff()
         {
-            string id = "BlessingBuff";
-            switch (this.BuffType.ToLower())
+            string id = $"RSV.{BuffType?.Trim()}";
+            int ms = Math.Max(0, this.Duration) * 1000;
+
+            var effects = new StardewValley.Buffs.BuffEffects();
+
+            switch (BuffType?.ToLowerInvariant())
             {
-                case "goblinscurse":
-                    id = Buff.goblinsCurse;
+                case "fishing":
+                    effects.FishingLevel.Value = this.Value;
                     break;
-                case "slimed":
-                    id = Buff.slimed;
+
+                case "magnetism":
+                    effects.MagneticRadius.Value = this.Value;
                     break;
-                case "evileye":
-                    id = Buff.evilEye;
+
+                case "maxenergy":
+                    effects.MaxStamina.Value = this.Value;
                     break;
-                case "tipsy":
-                    id = Buff.tipsy;
+
+                case "speed":
+                    effects.Speed.Value = this.Value;
                     break;
-                case "fear":
-                    id = Buff.fear;
+
+                case "defense":
+                    effects.Defense.Value = this.Value;
                     break;
-                case "frozen":
-                    id = Buff.frozen;
-                    break;
-                case "yobablessing":
-                    id = Buff.yobaBlessing;
-                    break;
-                case "nauseous":
-                    id = Buff.nauseous;
-                    break;
-                case "darkness":
-                    id = Buff.darkness;
-                    break;
-                case "weakness":
-                    id = Buff.weakness;
-                    break;
-                case "squidinkravioli":
-                    id = Buff.squidInkRavioli;
+
+                case "attack":
+                    effects.Attack.Value = this.Value;
                     break;
             }
 
-            Buff buff = new Buff(id);
-            if (id.Equals("BlessingBuff"))
-            {
-                switch (this.BuffType.ToLower())
-                {
-                    case "farming":
-                        buff.effects.FarmingLevel.Value = Value;
-                        break;
-                    case "fishing":
-                        buff.effects.FishingLevel.Value = Value;
-                        break;
-                    case "mining":
-                        buff.effects.MiningLevel.Value = Value;
-                        break;
-                    case "luck":
-                        buff.effects.LuckLevel.Value = Value;
-                        break;
-                    case "foraging":
-                        buff.effects.ForagingLevel.Value = Value;
-                        break;
-                    case "maxstamina":
-                        buff.effects.MaxStamina.Value = Value;
-                        break;
-                    case "speed":
-                        buff.effects.Speed.Value = Value;
-                        break;
-                    case "defense":
-                        buff.effects.Defense.Value = Value;
-                        break;
-                    case "attack":
-                        buff.effects.Attack.Value = Value;
-                        break;
-                }
-            }
+            var buff = new Buff(
+                id: id,
+                displayName: BuffType ?? "RSV Buff",
+                description: null,
+                iconTexture: null, // usa ícone padrão quando nulo
+                iconSheetIndex: 0,
+                duration: ms,
+                effects: effects
+            );
 
-            buff.millisecondsDuration = buff.totalMillisecondsDuration = this.Duration * 1000;
-            buff.displaySource = Game1.getCharacterFromName("Raeriyala").displayName;
             Game1.player.applyBuff(buff);
-
         }
     }
 }
