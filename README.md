@@ -28,6 +28,26 @@ Adheres to [Keep a Changelog](https://keepachangelog.com) and uses Semantic Vers
 ### Fixed
 - N/A
 
+
+## Installation
+
+1. Ensure Stardew Valley is version **1.6.x**  
+2. Install **SMAPI** (latest)  
+3. Install **SpaceCore** mod (required)  
+4. Place the compiled `RidgesideVillage.dll` into your SMAPI `Mods/RidgesideVillage/` folder  
+5. If using Mod Organizer, ensure paths match those in `.csproj` or adjust accordingly  
+6. Start the game via SMAPI
+
+---
+
+## Build Instructions MO2 (for contributors)
+
+``bash
+cd "Ridgeside SMAPI Component 2.0"
+dotnet build "RidgesideVillage.sln" -c Release \
+  -p:GameDir="C:\Steam\steamapps\common\Stardew Valley" \
+  -p:ModsDir="C:\Users\<USERNAME>\AppData\Local\ModOrganizer\Stardew Valley\mods"``
+
 # Welcome to Ridgeside Village!
 
 A small village located on the west side of Stardew Valley.
