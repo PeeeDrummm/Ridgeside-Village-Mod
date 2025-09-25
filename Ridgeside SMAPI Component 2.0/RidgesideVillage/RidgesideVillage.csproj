@@ -1,16 +1,25 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-  <EnableHarmony>true</EnableHarmony>
-    <Version>1.0.0</Version>
     <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <EnableHarmony>true</EnableHarmony>
+
+    <!-- usados pelo ModBuildConfig; via -p -->
+    <GamePath>$(GameDir)</GamePath>
+    <GameModsPath>$(ModsDir)</GameModsPath>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.4.0" />
+    <!-- resolve SDV/SMAPI/MonoGame/xTile/Netcode -->
+    <PackageReference Include="Pathoschild.Stardew.ModBuildConfig" Version="4.4.0" PrivateAssets="all" />
   </ItemGroup>
-	<ItemGroup>
-		<Reference Include="SpaceCore">
-			<HintPath>$(GameModsPath)\SpaceCore\SpaceCore.dll</HintPath>
-			<Private>false</Private>
-		</Reference>
-	</ItemGroup>
+
+  <!-- Referência EXATA para o SpaceCore no MO2 - LEMBRA DE MUDAR PARA O SEU USUÁRIO, SE NÃO DA PROBLEMA NA HORA DE COMPILAR -->
+  <ItemGroup>
+    <Reference Include="SpaceCore">
+      <HintPath>C:\Users\<SEU USUARIO>\AppData\Local\ModOrganizer\Stardew Valley\mods\SpaceCore\SpaceCore\SpaceCore.dll</HintPath> //
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
 </Project>
