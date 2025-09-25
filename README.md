@@ -1,3 +1,33 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.  
+Adheres to [Keep a Changelog](https://keepachangelog.com) and uses Semantic Versioning.
+
+## [Unreleased]
+
+### Added
+- GrowPlants buff now affects all locations (not just main farm)  
+- 1.6+ support: create forage items via `ItemRegistry.Create`  
+- Alias `SObject = StardewValley.Object` to disambiguate `Object` type  
+
+### Changed
+- OfferingData and buff logic migrated to 1.6 API (use `Buff(id, effects)` instead of static fields)  
+- `.csproj` updated to reference `SpaceCore.dll` from MO2 path  
+
+### Fixed
+- Method-group comparisons corrected (added parentheses where needed)  
+- Ambiguous `Object` references resolved  
+- Build errors due to missing namespace imports fixed  
+
+## [v1.0.0] – 2025-09-25
+### Added
+- Initial version with GrowPlants buff  
+- Support for wild seed crops and regular crops  
+- Config/API integration with OfferingData  
+
+### Fixed
+- N/A
+
 # Welcome to Ridgeside Village!
 
 A small village located on the west side of Stardew Valley.
